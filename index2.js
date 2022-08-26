@@ -23,43 +23,6 @@ const defineTextures = (atlas, data) => {
     }
 }
 
-const textureParse = (texture) => {
-    const fileName = texture.image;
-
-    loadImage(`./input/${fileName}`).then((image) => {
-        texture.frames.forEach(frameOptions => {
-            frameParse(image, frameOptions);
-        });
-    });
-}
-
-const frameParse = (img, frameOptions) => {
-    const fileName = frameOptions.filename;
-    if (!fileName) return;
-
-    let { x, y, w, h, r } = frameOptions.frame;
-    if (r) {
-        [w, h] = [h, w];
-    }
-
-    const canvas = createCanvas(w, h);
-
-    const ctx = canvas.getContext('2d');
-
-    ctx.drawImage(img, x, y, w, h, 0, 0, w, h);
-
-    const buffer = canvas.toBuffer("image/png", {
-        compressionLevel: 6, 
-        filters: canvas.PNG_ALL_FILTERS, 
-        palette: undefined, 
-        backgroundIndex: 0, 
-        resolution: undefined
-    })
-    
-    const postfix = r ? "_rotated" : "";
-    fs.writeFileSync(`./output/${fileName}${postfix}.png`, buffer );
-}
-
 const parseSpineAtlas = (data) => {
     const textures = {
         image: "",
@@ -69,7 +32,7 @@ const parseSpineAtlas = (data) => {
     let blockIndex = 0;
     const lines = data.split("\n");
     lines.forEach((line, i) => {
-        if (line.includes(".png")) textures.image = line.trim().replace("\r", "");
+        if (line.includes(".png")) textures.image = line;
         if (line.includes("rotate")) {
             textures.frames[blockIndex].filename = lines[i - 1].trim().replace("\r", "");
             textures.frames[blockIndex].frame.r = line.includes("true");
@@ -90,5 +53,5 @@ const parseSpineAtlas = (data) => {
         }
     });
 
-    return [textures];
+    return textures;
 }
