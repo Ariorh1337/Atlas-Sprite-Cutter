@@ -1,7 +1,7 @@
 ABOUT
 -----------------------------------
 
-This script is designed to automatically slice the atlas from the TexturePackerGUI program.
+This script is designed to automatically slice the atlas from the TexturePacker `v5.5.0` program.
 
 In the `input` folder you need to put the `PNG` and `JSON` atlas files.
 
@@ -19,5 +19,5 @@ INSTALL
 RUN
 -----------------------------------
 
-`node index.js atlas.json`
+`node index.js example.json`
 
