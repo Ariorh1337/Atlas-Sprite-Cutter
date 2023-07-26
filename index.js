@@ -15,7 +15,25 @@ fs.readFile(`./input/${atlas}`, (err, data) => {
 
 const defineTextures = (atlas, data) => {
     if (atlas.indexOf("json") > -1) {
-        return JSON.parse(data).textures;
+        const json = JSON.parse(data);
+
+        if (json.textures) {
+            return json.textures;
+        }
+
+        if (json.frames) {
+            const frames = Object.keys(json.frames).map(name => {
+                return {
+                    filename: name,
+                    ...json.frames[name],
+                }
+            });
+
+            return [{
+                image: atlas.split(".")[0] + ".png",
+                frames: frames,
+            }];
+        }
     }
 
     if (atlas.indexOf("atlas") > -1) {
